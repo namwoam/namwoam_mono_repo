@@ -9,6 +9,10 @@
 int xValue , yValue;
 int aValue , bValue , cValue , dValue , eValue;
 
+void send(char ch){
+  Serial.write(ch);
+}
+
 void joystickInput(){
   xValue = analogRead(joyX);
   yValue = analogRead(joyY);
@@ -22,16 +26,16 @@ void joystickInput(){
   Serial.print('\n');
   */
   if (xValue > 700){
-    Serial.write('R');
+    send('R');
   }
   else if (xValue < 300){
-    Serial.write('L');
+    send('L');
   }
   else if (yValue > 700){
-    Serial.write('F');
+    send('F');
   }
   else if (yValue < 300){
-    Serial.write('X');
+    send('X');
   }
 }
 
@@ -43,19 +47,19 @@ void buttonInput(){
    dValue = digitalRead(buttonD);
    eValue = digitalRead(buttonE);
    if (aValue == 1){
-    Serial.print('A');
+    send('A');
    }
    if (bValue == 1){
-    Serial.print('B');
+    send('B');
    }
    if (cValue == 1){
-    Serial.print('C');
+    send('C');
    }
    if (dValue == 1){
-    Serial.print('D');
+    send('D');
    }
    if (eValue == 1){
-    Serial.print('E');
+    send('E');
    }
 }
 
@@ -72,7 +76,6 @@ void setup() {
 void loop() {
   joystickInput();
   buttonInput();
-  Serial.print('\n');
-  delay(200);
+  delay(100);
 
 }
