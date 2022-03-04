@@ -83,7 +83,7 @@ else:
     a = -1
 
 condition = False
-a = 1 if condition else -1
+a = (1 if condition else -1)
 
 computer = 10
 user = int(input())
@@ -112,5 +112,6 @@ if (c > b):
 a, b, c = 1, 2, 3
 if (c > b and c > a):
     print("c is the biggest number")
+
 
 
