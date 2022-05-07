@@ -1,0 +1,58 @@
+<h1>超級貓貓星際漫遊-1 </h1>
+<div>
+    <h2>題目敘述</h2>
+    <p>超級貓貓男駕駛著超級貓貓號，目標是尋找下一顆地球。</p>
+    <p>超級貓貓號使用一種很特殊的燃料－貓貓油，才能在星際間航行。</p>
+    <p>由於貓貓油的取得很困難，因此超級貓貓男想要在出發前往下一顆星球之前就確定剩下來的貓貓油還夠不夠。</p>
+    <p>貓貓油的消耗方式也很特殊(畢竟是很特殊的燃料)。</p>
+    <p>行駛第一個天文單位需要一單位的貓貓油，行駛第二個天文單位需要二單位的貓貓油。</p>
+    <p>以此類推，行駛第 n 個天文單位需要 n 單位的貓貓油。</p>
+    <p>現在，超級貓貓男會跟你說下一顆星球距離 a 天文單位，以及超級貓貓號還剩下 b 單位的超級貓貓油。</p>
+    <p>如果貓貓油足夠前往下一顆星球，請你輸出： <prev><code>Maow oil enough</code></prev>。</p>
+    <p>反之如果貓貓油不足以前往下一顆星球，請你輸出： <prev><code>Maow oil not enough</code></prev>。</p>
+</div>
+<div>
+    <h2>輸入</h2>
+    <p>每筆測資的輸入包含一行兩個大於 0 整數 a 及 b ，以空白分開。</p>
+    <h2>輸出</h2>
+    <p>輸出
+        <prev><code>Maow oil enough</code></prev> 或
+        <prev><code>Maow oil not enough</code></prev>。
+    </p>
+</div>
+<div>
+    <h2>範例測資</h2>
+    <h3>範例輸入1</h3>
+    <prev>
+        <code>
+            10 55
+        </code>
+    </prev>
+    <h3>範例輸出1</h3>
+    <prev>
+        <code>
+            Maow oil enough
+        </code>
+    </prev>
+    <h3>範例輸入2</h3>
+    <prev>
+        <code>
+            10 54
+        </code>
+    </prev>
+    <h3>範例輸出2</h3>
+    <prev>
+        <code>
+            Maow oil not enough
+        </code>
+    </prev>
+</div>
+<div>
+    <h2>Hint</h2>
+    <p>超級貓貓男知道你還不太會操作輸入以及輸出，因此幫你handle好了。</p>
+    <prev>
+        <code>
+            a, b = map(int, input().split(" "))
+        </code>
+    </prev>
+</div>

@@ -271,7 +271,7 @@ template <typename T, size_t kMaximumSize>
 void BoundedSizeDynamicArray<T, kMaximumSize>::PushFront(const T &val)
 {
     BoundedSizeDynamicArray<T, kMaximumSize>::PushBack(BoundedSizeDynamicArray<T, kMaximumSize>::Back());
-    for (int i = 1; i < (int)size_; i++)
+    for (int i = size_; i > 0; i--)
     {
         elems_[i] = elems_[i - 1];
     }
@@ -301,8 +301,20 @@ void BoundedSizeDynamicArray<T, kMaximumSize>::PushMiddle(const T &val)
 {
     int ptr = (size_ + 1) / 2;
     BoundedSizeDynamicArray<T, kMaximumSize>::PushBack(BoundedSizeDynamicArray<T, kMaximumSize>::Back());
-    for (int i = ptr; i < size_; i++)
+    for (int i = size_; i > ptr; i--)
     {
-        
+        elems_[i] = elems_[i - 1];
     }
+    elems_[ptr] = val;
+}
+
+template <typename T, size_t kMaximumSize>
+void BoundedSizeDynamicArray<T, kMaximumSize>::PopMiddle()
+{
+    int ptr = (size_) / 2;
+    for (int i = ptr; i < size_ - 1; i++)
+    {
+        elems_[i] = elems_[i + 1];
+    }
+    BoundedSizeDynamicArray<T, kMaximumSize>::PopBack();
 }

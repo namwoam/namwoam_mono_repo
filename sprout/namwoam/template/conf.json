@@ -1,0 +1,28 @@
+{
+  "name": "比24還要好笑的笑話",
+  "memlimit": 65536, 
+  "compile": "python3", 
+  "timelimit": 1000, 
+  "score": "100", 
+  "test": [
+    {
+      "data": [
+        1
+      ], 
+      "weight": 33
+    },
+    {
+      "data": [
+        2
+      ], 
+      "weight": 33
+    },
+    {
+      "data": [
+        3
+      ], 
+      "weight": 34
+    }
+  ], 
+  "check": "diff"
+}
