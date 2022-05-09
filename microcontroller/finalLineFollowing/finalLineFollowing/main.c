@@ -48,9 +48,9 @@
 int sensorValues[sensorCount];
 int sensorPins[sensorCount] = { pinC1 , pinC2 , pinC3};
 
-int ledPins[sensorCount] = 	{pinB0 , pinD2 , pinD7 };
+int ledPins[sensorCount] = 	{pinD6 , pinD2 , pinD7 };
 
-#define motorLeftA pinD6
+#define motorLeftA pinB2
 #define motorLeftB pinD5
 #define motorRightA pinB3
 #define motorRightB pinD3

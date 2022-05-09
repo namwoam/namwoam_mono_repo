@@ -1,15 +1,17 @@
 /*
- * maze.c
- *
- * Created: 5/4/2022 4:59:10 PM
- * Author : USER
- */ 
+* maze.c
+*
+* Created: 5/4/2022 4:59:10 PM
+* Author : USER
+*/
 
 #define F_CPU 8000000UL
 #include <avr/io.h>
 #include <stdlib.h>
 #include <string.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
+
 
 // General library
 #define INPUT 0
@@ -43,20 +45,22 @@
 #define pinB6 21
 #define pinB7 22
 
-#define sensorCount 3
+#define rightIR pinC4
+#define leftIR pinC0
+#define ultrasonicTrig pinB6
+#define ultrasonicEcho pinB0
 
-int sensorValues[sensorCount];
-int sensorPins[sensorCount] = { pinC5 , pinC4 , pinC0};
-
-int ledPins[sensorCount] = 	{pinB0 , pinD2 , pinD7 };
-
-#define motorLeftA pinD6
+#define motorLeftA pinB2
 #define motorLeftB pinD5
 #define motorRightA pinB3
 #define motorRightB pinD3
 
-#define motorLeft_maxSpeed 255
-#define motorRight_maxSpeed 255
+#define motorLeftSpeed 150
+#define motorRightSpeed 150
+
+int TimerOverflow = 0;
+
+int frontDistance = 0;
 
 
 void digitalWrite(int pin , int n){
@@ -201,116 +205,68 @@ void printString(char* StringPtr){
 	}
 }
 
-void readFromDMSSensor()
+ISR(TIMER1_OVF_vect)
 {
-	int voltage;
-	voltage=analogRead(pinC5);
-	sensorValues[0]=voltage;
-	char Buffer[20];
-	char *DMSvalue =  itoa(voltage, Buffer, 10);
-	strcat(DMSvalue, "\n");
-	printString(DMSvalue);
+	TimerOverflow ++; // toggle PC5
 }
 
-void readFromIRSensor(){
-	for (int i=1;i<sensorCount;i++){
-		sensorValues[i] = analogRead(sensorPins[i]);
-	char Buffer[20];
-	char *IRvalue =  itoa(sensorValues[i], Buffer, 10);
-	strcat(IRvalue, "\n");
-	printString(IRvalue);
-	}
+
+void ultrasonic(){
+	digitalWrite(ultrasonicTrig , HIGH);
+	_delay_us(10);
+	digitalWrite(ultrasonicTrig , LOW);
+	double count = 0;
 	
+	TCNT1 = 0;	/* Clear Timer counter */
+	TCCR1B = 0x41;	/* Capture on rising edge, No prescaler*/
+	TIFR1 = (1<<ICF1 | 1<<TOV1);	/* Clear ICP flag (Input Capture flag) and  Timer Overflow flag*/
+
+	/*Calculate width of Echo by Input Capture (ICP) */
+	while ((TIFR1 & (1 << ICF1)) == 0)/* Wait for rising edge */
+	TCNT1 = 0;	/* Clear Timer counter */
+	TCCR1B = 0x01;	/* Capture on falling edge, No prescaler */
+	TIFR1 = (1<<ICF1 | 1<<TOV1);	/* Clear ICP flag (Input Capture flag) and Timer Overflow flag*/
+	TimerOverflow = 0;/* Clear Timer overflow count */
+	while ((TIFR1 & (1 << ICF1)) == 0)/* Wait for falling edge */
+	count = TCNT1H * 256 + TCNT1L + (65535 * TimerOverflow);	/* Take count */
+	/* 8MHz Timer freq, sound speed = 343 m/s */
+	double distance = (double)count / 466.47;
+	frontDistance = distance;
+	char str[10];
+	dtostrf(distance, 2 , 2 , str);/* distance to string */
+	strcat(str, "cm\n");	/* Concat unit i.e.cm */
+	printString(str);
 }
-
-
 
 void setup(){
-	for (int i=0;i<sensorCount;i++){
-		pinMode(sensorPins[i] , INPUT);
-		pinMode(ledPins[i] , OUTPUT);
-	}
 	pinMode(motorLeftA , OUTPUT);
 	pinMode(motorLeftB , OUTPUT);
 	pinMode(motorRightA , OUTPUT);
 	pinMode(motorRightB , OUTPUT);
+	pinMode(ultrasonicTrig , OUTPUT);
+	pinMode(ultrasonicEcho , INPUT);
+	pinMode(rightIR , INPUT);
+	pinMode(leftIR , INPUT);
 	setupSerial();
+	sei();
+	TIMSK1 = (1<<TOIE1);; // enable timer1 overflow interrupt and input
+	TCCR1A = 0;
 }
 
-void updateSpeed(int speedLeft , int speedRight){
-	analogWrite(motorLeftA , speedLeft);
-	analogWrite(motorLeftB , 0);
-	analogWrite(motorRightA , speedRight);
-	analogWrite(motorRightB , 0);
-	return;
-}
-
-int isForward()
-{
-	if(sensorValues[0] > 100)
-		return 0;
-	else if(sensorValues[0]<=100)
-		return 1;
-	else
-		return 2;
-}
-
-int isRight()
-{
-	if(sensorValues[1] > 100)
-		return 0;
-	else if(sensorValues[1]<=100)
-		return 1;
-	else
-		return 2;
-}
-
-int isLeft()
-{
-	if(sensorValues[2] > 100)
-		return 0;
-	else if(sensorValues[2]<=100)
-		return 1;
-	else
-		return 2;
-}
-
-int direction()
-{
-	if(isForward()==0 && isRight()==1)
-		return 1; //forward
-	else if(isForward()==0 && isRight()==0)
-		return 2; //turn right
-	else if (isForward()==1 && isRight()==1)
-		return 3; //turn left
-	else
-		return 4;
-}
-
-void updateLed(){
-	for (int i=0;i<sensorCount;i++){
-		digitalWrite(ledPins[i] , LOW);
-		if (direction()==i+1){
-			digitalWrite(ledPins[i] , HIGH);
-		}
-	}
-}
 int main(void)
 {
 	setup();
+	char greet[] =  "Hello World!\n";
 	/* Replace with your application code */
 	while (1)
 	{
-		readFromDMSSensor();
-		readFromIRSensor();
-		updateLed();
-		if (direction()==1)
-			updateSpeed(motorRight_maxSpeed,motorLeft_maxSpeed);
-		else if (direction()==2)
-			updateSpeed(motorLeft_maxSpeed/3 , motorLeft_maxSpeed);
-		else if (direction()==3)
-			updateSpeed(motorRight_maxSpeed , motorLeft_maxSpeed/3);
-		
+		printString(greet);
+		ultrasonic();
+		analogWrite(motorLeftA , motorLeftSpeed);
+		analogWrite(motorLeftB , 0);
+		analogWrite(motorRightA , motorRightSpeed);
+		analogWrite(motorRightB , 0);
+		_delay_ms(100);
 	}
 }
 
