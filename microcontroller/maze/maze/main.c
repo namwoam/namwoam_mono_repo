@@ -46,17 +46,26 @@
 #define pinB7 22
 
 #define rightIR pinC4
-#define leftIR pinC0
-#define ultrasonicTrig pinB6
-#define ultrasonicEcho pinB0
+#define frontIR pinC5
+#define pinDMS pinC0
 
-#define motorLeftA pinB2
+#define motorLeftA pinD6
 #define motorLeftB pinD5
 #define motorRightA pinB3
 #define motorRightB pinD3
 
-#define motorLeftSpeed 150
-#define motorRightSpeed 150
+#define ledCount 3
+#define pinBlink pinB1
+#define pinReady pinB6
+
+int pinLED[ledCount] = {pinB2 , pinD2 , pinD7} ; 
+	
+
+#define motorLeftSpeed 200
+#define motorRightSpeed 210
+
+#define blocking 1
+#define clear 0
 
 int TimerOverflow = 0;
 
@@ -168,13 +177,15 @@ void analogWrite(int pin , int val){
 	return ;
 }
 
+
 int analogRead(int pin){
 	if (pin <= pinC5 && pin >= pinC0){
 		int lowByte , highByte;
-		ADCSRA=0b10000111; // enable + prescaler
 		ADMUX=(0b11000000 + pin - pinC0); // ref volt + channel
+		ADCSRA = 0b10000111;
+		ADCSRA|= (1<<ADEN);
 		ADCSRA|=(1<<ADIF); // clear ADIF
-		ADCSRA|=(1<<ADSC); // start ADC
+		ADCSRA|=(1<<ADSC); 
 		while((ADCSRA&(1<<ADIF))==0); // wait for ADC done
 		lowByte=ADCL; // read low byte first
 		highByte=ADCH;
@@ -186,11 +197,24 @@ int analogRead(int pin){
 	
 }
 
+/*
+int readDistance()
+{
+	int adcHigh,adcLow;
+	int voltage;
+	ADCSRA|=(1<<ADIF); // clear ADIF
+	ADCSRA|=(1<<ADSC); // start ADC
+	while((ADCSRA&(1<<ADIF))==0); // wait for ADC done
+	adcLow=ADCL;
+	adcHigh=ADCH;
+	voltage=adcHigh*256+adcLow;
+	return voltage;
+}
+*/
+
 void setupSerial(){
 	unsigned int BaudR=9600;
 	unsigned int ubrr=(F_CPU/(BaudR*16UL))-1;
-	CLKPR=0b10000000;
-	CLKPR=0b00000000;
 	UBRR0H=(unsigned char)(ubrr>>8);
 	UBRR0L=(unsigned char)ubrr;
 	UCSR0B=(1<<TXEN0);
@@ -211,63 +235,172 @@ ISR(TIMER1_OVF_vect)
 }
 
 
-void ultrasonic(){
-	digitalWrite(ultrasonicTrig , HIGH);
-	_delay_us(10);
-	digitalWrite(ultrasonicTrig , LOW);
-	double count = 0;
-	
-	TCNT1 = 0;	/* Clear Timer counter */
-	TCCR1B = 0x41;	/* Capture on rising edge, No prescaler*/
-	TIFR1 = (1<<ICF1 | 1<<TOV1);	/* Clear ICP flag (Input Capture flag) and  Timer Overflow flag*/
 
-	/*Calculate width of Echo by Input Capture (ICP) */
-	while ((TIFR1 & (1 << ICF1)) == 0)/* Wait for rising edge */
-	TCNT1 = 0;	/* Clear Timer counter */
-	TCCR1B = 0x01;	/* Capture on falling edge, No prescaler */
-	TIFR1 = (1<<ICF1 | 1<<TOV1);	/* Clear ICP flag (Input Capture flag) and Timer Overflow flag*/
-	TimerOverflow = 0;/* Clear Timer overflow count */
-	while ((TIFR1 & (1 << ICF1)) == 0)/* Wait for falling edge */
-	count = TCNT1H * 256 + TCNT1L + (65535 * TimerOverflow);	/* Take count */
-	/* 8MHz Timer freq, sound speed = 343 m/s */
-	double distance = (double)count / 466.47;
-	frontDistance = distance;
-	char str[10];
-	dtostrf(distance, 2 , 2 , str);/* distance to string */
-	strcat(str, "cm\n");	/* Concat unit i.e.cm */
-	printString(str);
-}
 
 void setup(){
 	pinMode(motorLeftA , OUTPUT);
 	pinMode(motorLeftB , OUTPUT);
 	pinMode(motorRightA , OUTPUT);
 	pinMode(motorRightB , OUTPUT);
-	pinMode(ultrasonicTrig , OUTPUT);
-	pinMode(ultrasonicEcho , INPUT);
+	pinMode(pinDMS ,  INPUT);
 	pinMode(rightIR , INPUT);
-	pinMode(leftIR , INPUT);
+	pinMode(frontIR , INPUT);
+	for (int i=0;i<ledCount ;i++){
+		pinMode(pinLED[i] , OUTPUT);
+		digitalWrite(pinLED[i] , HIGH);
+	}
+	pinMode(pinBlink , OUTPUT);
+	digitalWrite(pinBlink , HIGH);
+	pinMode(pinReady , OUTPUT);
+	digitalWrite(pinReady , HIGH);
 	setupSerial();
 	sei();
 	TIMSK1 = (1<<TOIE1);; // enable timer1 overflow interrupt and input
 	TCCR1A = 0;
+	ADCSRA=0b10000111; // enable + prescaler
+	ADMUX=0b11000000; // ref volt + channel
+	ADCSRA |= (1<<ADEN);
+}
+
+void stop(){
+	analogWrite(motorRightA , 0);
+	analogWrite(motorRightB , 0);
+	analogWrite(motorLeftA , 0);
+	analogWrite(motorLeftB , 0);
+}
+
+void turnRight(){
+	analogWrite(motorRightA , 0);
+	analogWrite(motorRightB , motorRightSpeed);
+	analogWrite(motorLeftA , motorLeftSpeed);
+	analogWrite(motorLeftB , 0);
+	_delay_ms(300);
+	stop();
+}
+
+void turnLeft(){
+	analogWrite(motorRightA , motorRightSpeed);
+	analogWrite(motorRightB , 0);
+	analogWrite(motorLeftA , 0);
+	analogWrite(motorLeftB , motorLeftSpeed);
+	_delay_ms(250);
+	stop();
+}
+
+void blink(int n){
+	for (int i=0;i<n;i++){
+		digitalWrite(pinBlink , LOW);
+		_delay_ms(50);
+		digitalWrite(pinBlink , HIGH);
+		_delay_ms(50);
+	}
+}
+
+int blockingIR(int pin){
+	int limit = 10 ;
+	int diff = 2;
+	int cnt = 0;
+	for (int i=0;i<limit;i++){
+		int val = analogRead(pin);
+		if (val < 500){
+			cnt ++;
+		}
+	}
+	if (cnt >= limit - diff){
+		return blocking;
+	}
+	else{
+		return clear;
+	}
+	
 }
 
 int main(void)
 {
 	setup();
-	char greet[] =  "Hello World!\n";
 	/* Replace with your application code */
+	
 	while (1)
 	{
-		printString(greet);
-		ultrasonic();
-		analogWrite(motorLeftA , motorLeftSpeed);
-		analogWrite(motorLeftB , 0);
-		analogWrite(motorRightA , motorRightSpeed);
-		analogWrite(motorRightB , 0);
-		_delay_ms(100);
+		digitalWrite(pinReady , LOW);
+		_delay_ms(50);
+		digitalWrite(pinReady , HIGH);
+		_delay_ms(50);
+		char str[20];
+		int tmp = analogRead(frontIR);
+		itoa(tmp , str , 10);
+		strcat(str , "\n");
+		printString(str);
+		int blocked = 0;
+		if (blockingIR(rightIR) == blocking){
+			digitalWrite(pinLED[2] , LOW);
+		}
+		else{
+			digitalWrite(pinLED[2] , HIGH);
+		}
+		if (blockingIR(frontIR) == blocking){
+			digitalWrite(pinLED[1] , LOW);
+		}
+		else{
+			digitalWrite(pinLED[1] , HIGH);
+		}
+		
+		if (blockingIR(frontIR) == blocking && blockingIR(rightIR) == blocking){
+			blocked = 0;
+			analogWrite(motorLeftA ,  0);
+			analogWrite(motorLeftB ,  motorLeftSpeed);
+			analogWrite(motorRightA , motorRightSpeed);
+			analogWrite(motorRightB , 0);
+		}
+		if (blockingIR(frontIR) == blocking && blockingIR(rightIR) == clear ){
+			
+			turnLeft();
+			turnLeft();
+			analogWrite(motorLeftA , motorLeftSpeed);
+			analogWrite(motorLeftB , 0);
+			analogWrite(motorRightA , motorRightSpeed);
+			analogWrite(motorRightB , 0);
+			_delay_ms(200);
+			stop();
+		}
+		if (blockingIR(frontIR) == clear && blockingIR(rightIR) == blocking ){
+			blocked = 0;
+			analogWrite(motorLeftA , motorLeftSpeed);
+			analogWrite(motorLeftB , 0);
+			analogWrite(motorRightA , motorRightSpeed);
+			analogWrite(motorRightB , 0);
+		}
+		if (blockingIR(frontIR) == clear && blockingIR(rightIR) == clear){
+			blocked +=1;
+			analogWrite(motorLeftA , motorLeftSpeed);
+			analogWrite(motorLeftB , 0);
+			analogWrite(motorRightA , motorRightSpeed);
+			analogWrite(motorRightB , 0);
+			_delay_ms(100);
+			stop();
+			turnRight();
+			analogWrite(motorLeftA , motorLeftSpeed);
+			analogWrite(motorLeftB , 0);
+			analogWrite(motorRightA , motorRightSpeed);
+			analogWrite(motorRightB , 0);
+			_delay_ms(700);
+			stop();
+		}
 	}
+	/*
+	analogWrite(motorLeftA , motorLeftSpeed);
+	analogWrite(motorLeftB , 0);
+	analogWrite(motorRightA , motorRightSpeed);
+	analogWrite(motorRightB , 0);
+	*/
+	/*
+	
+	while (1){
+		turnLeft();
+		_delay_ms(500);
+	}
+	*/
+	
 }
 
 

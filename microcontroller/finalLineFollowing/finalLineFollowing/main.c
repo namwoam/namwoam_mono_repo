@@ -48,12 +48,14 @@
 int sensorValues[sensorCount];
 int sensorPins[sensorCount] = { pinC1 , pinC2 , pinC3};
 
-int ledPins[sensorCount] = 	{pinD6 , pinD2 , pinD7 };
+int ledPins[sensorCount] = 	{pinB2 , pinD2 , pinD7 };
 
-#define motorLeftA pinB2
+#define motorLeftA pinD6
 #define motorLeftB pinD5
 #define motorRightA pinB3
 #define motorRightB pinD3
+
+#define ledFast pinB6
 
 #define motorLeft_baseSpeed 180
 #define motorRight_baseSpeed 180
@@ -236,6 +238,7 @@ void setup(){
 	pinMode(motorLeftB , OUTPUT);
 	pinMode(motorRightA , OUTPUT);
 	pinMode(motorRightB , OUTPUT);
+	pinMode(ledFast , OUTPUT);
 	setupSerial();
 }
 
@@ -265,9 +268,11 @@ void pid(){
 	int motorSpeed = P*kP + I*kI + D*kD;
 	int speedLeft = motorLeft_baseSpeed + motorSpeed > motorLeft_maxSpeed? motorLeft_maxSpeed : (motorLeft_baseSpeed + motorSpeed < 0? 0:motorLeft_baseSpeed + motorSpeed );
 	int speedRight = motorRight_baseSpeed - motorSpeed > motorRight_baseSpeed? motorRight_maxSpeed : (motorRight_baseSpeed - motorSpeed < 0? 0:motorRight_baseSpeed - motorSpeed );
-	if (abs(motorSpeed) <10){
+	if (abs(motorSpeed)<20){
+		digitalWrite(ledFast , LOW);
 		speedLeft = motorLeft_maxSpeed;
 		speedRight = motorRight_maxSpeed;
+		digitalWrite(ledFast , HIGH);
 	}
 	updateSpeed(speedLeft , speedRight);
 }
@@ -303,7 +308,6 @@ int main(void)
 		getError();
 		pid();
 		//digitalControl();
-		_delay_ms(10);
 	}
 }
 
