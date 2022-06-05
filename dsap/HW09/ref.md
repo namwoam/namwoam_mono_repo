@@ -1,0 +1,1 @@
+1. https://stackoverflow.com/questions/7913835/check-if-one-string-is-a-prefix-of-another

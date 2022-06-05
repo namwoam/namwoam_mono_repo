@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm Wed May 18 17:46:35 2022
+AVRASM ver. 2.2.8  C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm Sun May 29 14:29:33 2022
 
 
 EQU  SIGNATURE_000 0000001e
@@ -696,19 +696,19 @@ EQU  TWIaddr      00000030
 EQU  SPMRaddr     00000032
 EQU  INT_VECTORS_SIZE 00000034
 CSEG setup        00000000
-CSEG mainLoop     0000000a
-CSEG play_C       0000001b
-CSEG play_D       00000021
-CSEG play_E       00000027
-CSEG play_F       0000002d
-CSEG play_G       00000033
-CSEG play_A       00000039
-CSEG play_B       0000003f
-CSEG endOfLoop    0000001a
-CSEG clearLED     00000047
-CSEG showLED      00000045
-CSEG playSpeaker  0000004b
-CSEG delay        0000004b
-CSEG L2           0000004c
-CSEG L3           0000004d
-CSEG L4           0000004e
+CSEG mainLoop     0000000b
+CSEG play_C       0000001c
+CSEG play_D       00000022
+CSEG play_E       00000028
+CSEG play_F       0000002e
+CSEG play_G       00000034
+CSEG play_A       0000003a
+CSEG play_B       00000040
+CSEG endOfLoop    0000001b
+CSEG clearLED     00000048
+CSEG showLED      00000046
+CSEG playSpeaker  0000004c
+CSEG delay        0000004c
+CSEG L2           0000004d
+CSEG L3           0000004e
+CSEG L4           0000004f

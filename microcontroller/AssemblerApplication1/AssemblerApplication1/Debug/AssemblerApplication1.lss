@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm Wed May 18 17:46:35 2022
+AVRASM ver. 2.2.8  C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm Sun May 29 14:29:33 2022
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\avrasm\inc\m328Pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\avrasm\inc\m328Pdef.inc'
@@ -1007,97 +1007,101 @@ AVRASM ver. 2.2.8  C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication
 000008 ef0f                      	ldi r16, 0b11111111
 000009 b904                      	out DDRB, r16 ;7-segment output setup
                                  
+00000a e010                      	ldi r17,0
+                                 
                                  mainLoop:
                                  ;r17 is used to store button input
                                  	;call clearLED
-00000a b119                      	in r17, PIND
-00000b 3011                      	cpi r17, 0b00000001 ;play C
-00000c f071                      		breq play_C
-00000d 3012                      	cpi r17, 0b00000010 ;play D
-00000e f091                      		breq play_D
-00000f 3014                      	cpi r17, 0b00000100 ;play E
-000010 f0b1                      		breq play_E
-000011 3018                      	cpi r17, 0b00001000 ;play F
-000012 f0d1                      		breq play_F
-000013 3110                      	cpi r17, 0b00010000 ;play G
-000014 f0f1                      		breq play_G
-000015 3210                      	cpi r17, 0b00100000 ;play A
-000016 f111                      		breq play_A
-000017 3410                      	cpi r17, 0b01000000 ;play B
-000018 f131                      		breq play_B
+00000b b119                      	in r17, PIND
+                                 	;inc r17
+                                 	;call delay
+00000c 3011                      	cpi r17, 0b00000001 ;play C
+00000d f071                      		breq play_C
+00000e 3012                      	cpi r17, 0b00000010 ;play D
+00000f f091                      		breq play_D
+000010 3014                      	cpi r17, 0b00000100 ;play E
+000011 f0b1                      	breq play_E
+000012 3018                      		cpi r17, 0b00001000 ;play F
+000013 f0d1                      	breq play_F
+000014 3110                      		cpi r17, 0b00010000 ;play G
+000015 f0f1                      		breq play_G
+000016 3210                      	cpi r17, 0b00100000 ;play A
+000017 f111                      		breq play_A
+000018 3410                      	cpi r17, 0b01000000 ;play B
+000019 f131                      		breq play_B
                                  
-000019 cff0                          rjmp mainLoop
+00001a cff0                          rjmp mainLoop
                                  
                                  endOfLoop:
-00001a cfef                      	rjmp mainLoop
+00001b cfef                      	rjmp mainLoop
                                  
                                  play_C:
-00001b 940e 0047                 	call clearLED
-00001d e436                      	ldi r19, 0b01000110
-00001e 940e 0045                 	call showLED
-000020 cff9                      	rjmp endOfLoop
+00001c 940e 0048                 	call clearLED
+00001e e436                      	ldi r19, 0b01000110
+00001f 940e 0046                 	call showLED
+000021 cff9                      	rjmp endOfLoop
                                  
                                  play_D:
-000021 940e 0047                 	call clearLED
-000023 e430                      	ldi r19, 0b01000000
-000024 940e 0045                 	call showLED
-000026 cff3                      	rjmp endOfLoop
+000022 940e 0048                 	call clearLED
+000024 e430                      	ldi r19, 0b01000000
+000025 940e 0046                 	call showLED
+000027 cff3                      	rjmp endOfLoop
                                  
                                  play_E:
-000027 940e 0047                 	call clearLED
-000029 e036                      	ldi r19, 0b00000110
-00002a 940e 0045                 	call showLED
-00002c cfed                      	rjmp endOfLoop
+000028 940e 0048                 	call clearLED
+00002a e036                      	ldi r19, 0b00000110
+00002b 940e 0046                 	call showLED
+00002d cfed                      	rjmp endOfLoop
                                  
                                  play_F:
-00002d 940e 0047                 	call clearLED
-00002f e03e                      	ldi r19, 0b00001110
-000030 940e 0045                 	call showLED
-000032 cfe7                      	rjmp endOfLoop
+00002e 940e 0048                 	call clearLED
+000030 e03e                      	ldi r19, 0b00001110
+000031 940e 0046                 	call showLED
+000033 cfe7                      	rjmp endOfLoop
                                  
                                  play_G:
-000033 940e 0047                 	call clearLED
-000035 e432                      	ldi r19, 0b01000010
-000036 940e 0045                 	call showLED
-000038 cfe1                      	rjmp endOfLoop
+000034 940e 0048                 	call clearLED
+000036 e432                      	ldi r19, 0b01000010
+000037 940e 0046                 	call showLED
+000039 cfe1                      	rjmp endOfLoop
                                  
                                  play_A:
-000039 940e 0047                 	call clearLED
-00003b e038                      	ldi r19, 0b00001000
-00003c 940e 0045                 	call showLED
-00003e cfdb                      	rjmp endOfLoop
+00003a 940e 0048                 	call clearLED
+00003c e038                      	ldi r19, 0b00001000
+00003d 940e 0046                 	call showLED
+00003f cfdb                      	rjmp endOfLoop
                                  
                                  play_B:
-00003f 940e 0047                 	call clearLED
-000041 e030                      	ldi r19, 0b00000000
-000042 940e 0045                 	call showLED
-000044 cfd5                      	rjmp endOfLoop
+000040 940e 0048                 	call clearLED
+000042 e030                      	ldi r19, 0b00000000
+000043 940e 0046                 	call showLED
+000045 cfd5                      	rjmp endOfLoop
                                  
                                  showLED:
                                  ; r19 is used to store 7-segment pattern
-000045 b935                      	out PORTB, r19
-000046 9508                      	ret
+000046 b935                      	out PORTB, r19
+000047 9508                      	ret
                                  
                                  clearLED:
-000047 ef3f                      	ldi r19, 0b11111111
-000048 940e 0045                 	call showLED
-00004a 9508                      	ret
+000048 ef3f                      	ldi r19, 0b11111111
+000049 940e 0046                 	call showLED
+00004b 9508                      	ret
                                  
                                  
                                  playSpeaker:
                                  ; r18 is used to store the delay time
                                  
                                  delay:
-00004b e04c                      	LDI R20, 12
-00004c e05c                      L2: LDI R21, 12
-00004d e062                      L3: LDI R22, 2
-00004e 956a                      L4: DEC R22
-00004f f7f1                      BRNE L4
-000050 955a                      DEC R21
-000051 f7d9                      BRNE L3
-000052 954a                      DEC R20
-000053 f7c1                      BRNE L2
-000054 9508                      RET
+00004c ef4f                      	LDI R20, 255
+00004d ef5f                      L2: LDI R21, 255
+00004e e06a                      L3: LDI R22, 10
+00004f 956a                      L4: DEC R22
+000050 f7f1                      BRNE L4
+000051 955a                      DEC R21
+000052 f7d9                      BRNE L3
+000053 954a                      DEC R20
+000054 f7c1                      BRNE L2
+000055 9508                      RET
                                  
 
 
@@ -1118,7 +1122,7 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  10 r17:   8 r18:   0 r19:   9 r20:   2 
+r13:   0 r14:   0 r15:   0 r16:  10 r17:   9 r18:   0 r19:   9 r20:   2 
 r21:   2 r22:   2 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
 Registers used: 6 out of 35 (17.1%)
@@ -1134,7 +1138,7 @@ clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
 cpi   :   7 cpse  :   0 dec   :   3 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 inc   :   0 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  16 lds   :   0 lpm   :   0 lsl   :   0 
+ld    :   0 ldd   :   0 ldi   :  17 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   6 pop   :   0 
 push  :   0 rcall :   0 ret   :   3 reti  :   0 rjmp  :   9 rol   :   0 
@@ -1148,7 +1152,7 @@ Instructions used: 10 out of 113 (8.8%)
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0000aa    170      0    170   32768   0.5%
+[.cseg] 0x000000 0x0000ac    172      0    172   32768   0.5%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

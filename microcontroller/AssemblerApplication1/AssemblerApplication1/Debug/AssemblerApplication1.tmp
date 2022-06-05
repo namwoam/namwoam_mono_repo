@@ -23,21 +23,21 @@
  </OUTPUT_FILES>
  <LABELS>
   <setup><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>12</LINE></setup>
-  <mainLoop><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>24</LINE></mainLoop>
-  <play_C><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>48</LINE></play_C>
-  <play_D><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>54</LINE></play_D>
-  <play_E><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>60</LINE></play_E>
-  <play_F><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>66</LINE></play_F>
-  <play_G><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>72</LINE></play_G>
-  <play_A><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>78</LINE></play_A>
-  <play_B><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>84</LINE></play_B>
-  <endOfLoop><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>45</LINE></endOfLoop>
-  <clearLED><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>95</LINE></clearLED>
-  <showLED><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>90</LINE></showLED>
-  <playSpeaker><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>101</LINE></playSpeaker>
-  <delay><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>104</LINE></delay>
-  <L2><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>106</LINE></L2>
-  <L3><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>107</LINE></L3>
-  <L4><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>108</LINE></L4>
+  <mainLoop><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>26</LINE></mainLoop>
+  <play_C><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>52</LINE></play_C>
+  <play_D><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>58</LINE></play_D>
+  <play_E><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>64</LINE></play_E>
+  <play_F><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>70</LINE></play_F>
+  <play_G><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>76</LINE></play_G>
+  <play_A><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>82</LINE></play_A>
+  <play_B><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>88</LINE></play_B>
+  <endOfLoop><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>49</LINE></endOfLoop>
+  <clearLED><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>99</LINE></clearLED>
+  <showLED><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>94</LINE></showLED>
+  <playSpeaker><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>105</LINE></playSpeaker>
+  <delay><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>108</LINE></delay>
+  <L2><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>110</LINE></L2>
+  <L3><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>111</LINE></L3>
+  <L4><FILE>C:\rep\namwoam_mono_repo\microcontroller\AssemblerApplication1\AssemblerApplication1\main.asm</FILE><LINE>112</LINE></L4>
  </LABELS>
 </ASSEMBLER_INFO>
