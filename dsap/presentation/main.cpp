@@ -19,20 +19,20 @@ void buildTree(size_t addr, std::vector<struct node> &tree, std::vector<int> &va
     if (tree.at(addr).l == tree.at(addr).r)
     {
         tree.at(addr).sum = val.at(tree.at(addr).l);
-        return;
+        return; // reach buttom
     }
     size_t middle = (tree.at(addr).l + tree.at(addr).r) / 2;
     struct node leftChildNode(tree.at(addr).l, middle);
     tree.push_back(leftChildNode);
     tree.at(addr).leftChild = tree.size() - 1;
-    buildTree(tree.at(addr).leftChild, tree, val);
+    buildTree(tree.at(addr).leftChild, tree, val); // build left sub tree
 
     struct node rightChildNode(middle + 1, tree.at(addr).r);
     tree.push_back(rightChildNode);
     tree.at(addr).rightChild = tree.size() - 1;
-    buildTree(tree.at(addr).rightChild, tree, val);
-
+    buildTree(tree.at(addr).rightChild, tree, val);// build right sub tree
     tree.at(addr).sum = tree.at(tree.at(addr).leftChild).sum + tree.at(tree.at(addr).rightChild).sum;
+    // sum[l,r] = sum[l , a]+sum[a+1 , r]
     return;
 }
 
